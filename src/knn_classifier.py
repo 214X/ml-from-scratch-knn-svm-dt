@@ -1,5 +1,5 @@
 from collections import Counter
-from distance_functions import euclidean_distance, manhattan_distance
+from distance import euclidean_distance, manhattan_distance
 
 
 class KNNClassifier:
