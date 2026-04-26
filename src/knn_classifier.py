@@ -1,4 +1,5 @@
 from collections import Counter
+import numpy as np
 
 
 class KNNClassifier:
@@ -59,3 +60,22 @@ class KNNClassifier:
             predictions.append(prediction)
 
         return predictions
+
+    def predict_proba(self, X_test):
+        """Estimate class probabilities from neighbor label frequencies."""
+        if self.X_train is None or self.y_train is None:
+            raise ValueError("The model must be fitted before prediction.")
+
+        classes = np.unique(self.y_train)
+        probabilities = []
+
+        for x in X_test:
+            neighbors = self._get_neighbors(x)
+            neighbor_labels = [label for _, label in neighbors]
+            label_counts = Counter(neighbor_labels)
+            probabilities.append([
+                label_counts.get(class_label, 0) / self.k
+                for class_label in classes
+            ])
+
+        return np.array(probabilities)
